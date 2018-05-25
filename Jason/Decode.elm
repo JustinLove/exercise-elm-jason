@@ -35,3 +35,11 @@ list decoder v =
 
 objectOfValues : Value -> Result String (List (String, Value))
 objectOfValues = Native.Jason.Decode.object
+
+keyValuePairs : (Value -> Result String a) -> Value -> Result String (List (String, a))
+keyValuePairs decoder v =
+  (objectOfValues v)
+    |> Result.andThen
+      (List.map (\(key,val) -> decoder val |> Result.map (\t -> (key,t)))
+        >> List.foldr (Result.map2 (::)) (Ok [])
+      )
