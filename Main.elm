@@ -90,6 +90,9 @@ all = describe "decoding"
     , it "convenient with pipeline" <| eql 
       (Ok (Just 1))
       (((succeed Just) |> map2 (|>) (field "one" int)) (Json.Encode.object [("one", Json.Encode.int 1)]))
+    , it "andThen" <| eql 
+      (Err "error")
+      (andThen (\e -> fail e) (field "one" string) (Json.Encode.object [("one", Json.Encode.string "error")]))
     ]
   ]
 

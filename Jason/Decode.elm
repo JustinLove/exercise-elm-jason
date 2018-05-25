@@ -62,6 +62,12 @@ map2 : (a -> b -> out) -> Decoder a -> Decoder b -> Decoder out
 map2 f a b v =
   Result.map2 f (a v) (b v)
 
+andThen : (a -> Decoder b) -> Decoder a -> Decoder b
+andThen f decoder v =
+  case decoder v of
+    Ok a -> f a v
+    Err err -> Err err
+
 succeed : a -> Decoder a
 succeed a v = Ok a
 
