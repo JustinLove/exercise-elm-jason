@@ -72,6 +72,15 @@ all = describe "decoding"
     , it "decodes an simple object with one element" <| eql 
       (Ok [("one", 1)])
       (keyValuePairs int (Json.Encode.object [("one", Json.Encode.int 1)]))
+    , it "pick out one field" <| eql 
+      (Ok 1)
+      (field "one" int (Json.Encode.object [("one", Json.Encode.int 1)]))
+    , it "reports downstream decoder errors" <| eql 
+      (Err "Expected an int: foo")
+      (field "one" int (Json.Encode.object [("one", Json.Encode.string "foo")]))
+    , it "reports field not found" <| eql 
+      (Err "field not found: one")
+      (field "one" int (Json.Encode.object [("two", Json.Encode.int 1)]))
     ]
   ]
 

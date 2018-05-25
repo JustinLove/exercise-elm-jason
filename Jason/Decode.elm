@@ -45,3 +45,15 @@ keyValuePairs decoder =
       (List.map (\(key,val) -> decoder val |> Result.map (\t -> (key,t)))
         >> List.foldr (Result.map2 (::)) (Ok [])
       )
+
+field : String -> Decoder a -> Decoder a
+field key decoder =
+  objectOfValues
+    >> Result.andThen
+      (List.foldl (\(k,v) res -> 
+        case res of
+          Ok r -> res
+          Err e -> if key == k then decoder v else res
+        )
+        (Err ("field not found: " ++ key))
+      )

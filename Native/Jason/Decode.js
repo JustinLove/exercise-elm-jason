@@ -6,7 +6,7 @@ var _user$project$Native_Jason_Decode = function() {
     if (typeof(value) == "string") {
       return Ok(value)
     } else {
-      return Err("Expected a string: " + value.toString)
+      return Err("Expected a string: " + value.toString())
     }
   }
 
@@ -14,7 +14,7 @@ var _user$project$Native_Jason_Decode = function() {
     if (typeof(value) == "number" && value == Math.floor(value)) {
       return Ok(value)
     } else {
-      return Err("Expected a int: " + value.toString)
+      return Err("Expected an int: " + value.toString())
     }
   }
 
@@ -22,7 +22,7 @@ var _user$project$Native_Jason_Decode = function() {
     if (typeof(value) == "object" && value.constructor == Array) {
       return Ok(_elm_lang$core$Native_Array.fromJSArray(value))
     } else {
-      return Err("Expected array: " + value.toString)
+      return Err("Expected array: " + value.toString())
     }
   }
 
@@ -30,7 +30,7 @@ var _user$project$Native_Jason_Decode = function() {
     if (typeof(value) == "object" && value.constructor == Array) {
       return Ok(_elm_lang$core$Native_List.fromArray(value))
     } else {
-      return Err("Expected list: " + value.toString)
+      return Err("Expected list: " + value.toString())
     }
   }
 
@@ -42,7 +42,7 @@ var _user$project$Native_Jason_Decode = function() {
       }
       return Ok(_elm_lang$core$Native_List.fromArray(fields))
     } else {
-      return Err("Expected object: " + value.toString)
+      return Err("Expected object: " + value.toString())
     }
   }
 
