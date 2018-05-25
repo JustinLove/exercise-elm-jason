@@ -5,41 +5,43 @@ import Native.Jason.Decode
 import Json.Encode exposing (Value)
 import Array exposing (Array)
 
-string : Value -> Result String String
+type alias Decoder a = Value -> Result String a
+
+string : Decoder String
 string = Native.Jason.Decode.string
 
-int : Value -> Result String Int
+int : Decoder Int
 int = Native.Jason.Decode.int
 
-arrayOfValues : Value -> Result String (Array Value)
+arrayOfValues : Decoder (Array Value)
 arrayOfValues = Native.Jason.Decode.array
 
-array : (Value -> Result String a) -> Value -> Result String (Array a)
-array decoder v =
-  (arrayOfValues v)
-    |> Result.andThen
+array : Decoder a -> Decoder (Array a)
+array decoder =
+  arrayOfValues
+    >> Result.andThen
       (Array.map decoder
         >> Array.foldl (Result.map2 Array.push) (Ok Array.empty)
       )
 
-listOfValues : Value -> Result String (List Value)
+listOfValues : Decoder (List Value)
 listOfValues = Native.Jason.Decode.list
 
-list : (Value -> Result String a) -> Value -> Result String (List a)
-list decoder v =
-  (listOfValues v)
-    |> Result.andThen
+list : Decoder a -> Decoder (List a)
+list decoder =
+  listOfValues
+    >> Result.andThen
       (List.map decoder
         >> List.foldr (Result.map2 (::)) (Ok [])
       )
 
-objectOfValues : Value -> Result String (List (String, Value))
+objectOfValues : Decoder (List (String, Value))
 objectOfValues = Native.Jason.Decode.object
 
-keyValuePairs : (Value -> Result String a) -> Value -> Result String (List (String, a))
-keyValuePairs decoder v =
-  (objectOfValues v)
-    |> Result.andThen
+keyValuePairs : Decoder a -> Decoder (List (String, a))
+keyValuePairs decoder =
+  objectOfValues
+    >> Result.andThen
       (List.map (\(key,val) -> decoder val |> Result.map (\t -> (key,t)))
         >> List.foldr (Result.map2 (::)) (Ok [])
       )
