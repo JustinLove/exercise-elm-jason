@@ -27,14 +27,20 @@ all = describe "decoding"
     int (Json.Encode.float 3.14)
   , it "decodes an empty array" <| eql 
     (Ok Array.empty)
-    (array (Json.Encode.array Array.empty))
+    (arrayOfValues (Json.Encode.array Array.empty))
   , it "fails on not-array" <| isErr <|
-    array (Json.Encode.int 42)
+    arrayOfValues (Json.Encode.int 42)
   , it "fails on object" <| isErr <|
-    array (Json.Encode.object [])
+    arrayOfValues (Json.Encode.object [])
   , it "decodes an array with an element" <| eql 
     (Ok <| Array.fromList [Json.Encode.int 1])
-    (array (Json.Encode.array <| Array.fromList [Json.Encode.int 1]))
+    (arrayOfValues (Json.Encode.array <| Array.fromList [Json.Encode.int 1]))
+  , it "is convenient to decode children" <| eql 
+    (Ok <| Array.fromList [1])
+    (array int (Json.Encode.array <| Array.fromList [Json.Encode.int 1]))
+  , it "maintains array order" <| eql 
+    (Ok <| Array.fromList [1, 2, 3])
+    (array int (Json.Encode.array <| Array.fromList (List.map Json.Encode.int [1, 2, 3])))
   ]
 
 isErr : Result err v -> Expectation
