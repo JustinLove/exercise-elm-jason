@@ -21,3 +21,14 @@ array decoder v =
       (Array.map decoder
         >> Array.foldl (Result.map2 Array.push) (Ok Array.empty)
       )
+
+listOfValues : Value -> Result String (List Value)
+listOfValues = Native.Jason.Decode.list
+
+list : (Value -> Result String a) -> Value -> Result String (List a)
+list decoder v =
+  (listOfValues v)
+    |> Result.andThen
+      (List.map decoder
+        >> List.foldr (Result.map2 (::)) (Ok [])
+      )

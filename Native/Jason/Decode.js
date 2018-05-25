@@ -26,9 +26,18 @@ var _user$project$Native_Jason_Decode = function() {
     }
   }
 
+  var list = function(value) {
+    if (typeof(value) == "object" && value.constructor == Array) {
+      return Ok(_elm_lang$core$Native_List.fromArray(value))
+    } else {
+      return Err("Expected list: " + value.toString)
+    }
+  }
+
   return {
     string: string,
     int: int,
     array: array,
+    list: list,
   }
 }();
