@@ -34,10 +34,23 @@ var _user$project$Native_Jason_Decode = function() {
     }
   }
 
+  var object = function(value) {
+    if (typeof(value) == "object" && value.constructor != Array) {
+      var fields = []
+      for (var key in value) {
+        fields.push(_elm_lang$core$Native_Utils.Tuple2(key, value[key]))
+      }
+      return Ok(_elm_lang$core$Native_List.fromArray(fields))
+    } else {
+      return Err("Expected object: " + value.toString)
+    }
+  }
+
   return {
     string: string,
     int: int,
     array: array,
     list: list,
+    object: object,
   }
 }();

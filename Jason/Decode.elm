@@ -32,3 +32,6 @@ list decoder v =
       (List.map decoder
         >> List.foldr (Result.map2 (::)) (Ok [])
       )
+
+objectOfValues : Value -> Result String (List (String, Value))
+objectOfValues = Native.Jason.Decode.object

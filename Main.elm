@@ -59,6 +59,14 @@ all = describe "decoding"
       (Ok [1, 2, 3])
       (list int (Json.Encode.list <| List.map Json.Encode.int [1, 2, 3]))
     ]
+  , describe "objects"
+    [ it "decodes an simple empty object" <| eql 
+      (Ok [])
+      (Native.Jason.Decode.object (Json.Encode.object []))
+    , it "decodes an object with an element" <| eql 
+      (Ok [ ("one", Json.Encode.int 1) ])
+      (Native.Jason.Decode.object <| (Json.Encode.object [("one", Json.Encode.int 1)]))
+    ]
   ]
 
 isErr : Result err v -> Expectation
