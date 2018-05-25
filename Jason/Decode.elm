@@ -53,3 +53,17 @@ field : String -> Decoder a -> Decoder a
 field key decoder v =
   fieldValue key v
     |> Result.andThen decoder
+
+map : (a -> out) -> Decoder a -> Decoder out
+map f a v =
+  Result.map f (a v)
+
+map2 : (a -> b -> out) -> Decoder a -> Decoder b -> Decoder out
+map2 f a b v =
+  Result.map2 f (a v) (b v)
+
+succeed : a -> Decoder a
+succeed a v = Ok a
+
+fail : String -> Decoder a
+fail err v = Err err

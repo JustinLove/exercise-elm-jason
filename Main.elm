@@ -81,6 +81,15 @@ all = describe "decoding"
     , it "reports field not found" <| eql 
       (Err "Field not found: one")
       (field "one" int (Json.Encode.object [("two", Json.Encode.int 1)]))
+    , it "convenient with constructors" <| eql 
+      (Ok (Just 1))
+      (map Just (field "one" int) (Json.Encode.object [("one", Json.Encode.int 1)]))
+    , it "convenient with constructors 2" <| eql 
+      (Ok (1, 2))
+      (map2 (,) (field "one" int) (field "two" int) (Json.Encode.object [("one", Json.Encode.int 1), ("two", Json.Encode.int 2)]))
+    , it "convenient with pipeline" <| eql 
+      (Ok (Just 1))
+      (((succeed Just) |> map2 (|>) (field "one" int)) (Json.Encode.object [("one", Json.Encode.int 1)]))
     ]
   ]
 
