@@ -79,7 +79,7 @@ all = describe "decoding"
       (Err "Expected an int: foo")
       (field "one" int (Json.Encode.object [("one", Json.Encode.string "foo")]))
     , it "reports field not found" <| eql 
-      (Err "field not found: one")
+      (Err "Field not found: one")
       (field "one" int (Json.Encode.object [("two", Json.Encode.int 1)]))
     ]
   ]

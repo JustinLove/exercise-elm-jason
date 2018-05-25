@@ -46,11 +46,24 @@ var _user$project$Native_Jason_Decode = function() {
     }
   }
 
+  var field = function(key, value) {
+    if (typeof(value) == "object" && value.constructor != Array) {
+      if (key in value) {
+        return Ok(value[key])
+      } else {
+        return Err("Field not found: " + key)
+      }
+    } else {
+      return Err("Expected object: " + value.toString())
+    }
+  }
+
   return {
     string: string,
     int: int,
     array: array,
     list: list,
     object: object,
+    field: F2(field),
   }
 }();

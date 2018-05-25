@@ -46,14 +46,10 @@ keyValuePairs decoder =
         >> List.foldr (Result.map2 (::)) (Ok [])
       )
 
+fieldValue : String -> Decoder Value
+fieldValue = Native.Jason.Decode.field
+
 field : String -> Decoder a -> Decoder a
-field key decoder =
-  objectOfValues
-    >> Result.andThen
-      (List.foldl (\(k,v) res -> 
-        case res of
-          Ok r -> res
-          Err e -> if key == k then decoder v else res
-        )
-        (Err ("field not found: " ++ key))
-      )
+field key decoder v =
+  fieldValue key v
+    |> Result.andThen decoder
